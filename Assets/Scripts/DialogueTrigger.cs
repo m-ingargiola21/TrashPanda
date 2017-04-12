@@ -50,6 +50,7 @@ public class DialogueTrigger : MonoBehaviour {
     private void OnTriggerExit(Collider other) {
         if (other.tag == "Player")
         {
+            GetComponent<Animator>().Play("Hello", 0); //Start the state machine from hello, the default state
             GetComponent<Animator>().SetBool("IsConversating", false);
         }
     }

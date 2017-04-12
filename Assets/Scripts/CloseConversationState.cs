@@ -1,24 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEngine.UI;
 
-public class DialogueState : StateMachineBehaviour {
-    [SerializeField]
-    string dialogueString;
-    [SerializeField]
-    string[] answerStrings;
+public class CloseConversationState : StateMachineBehaviour {
 
-    
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        for (int i = 1; i < 5; i++)
+        for (int i = 1; i < animator.parameterCount-1; i++) //0 is conversating, set in dialogue trigger
         {
             string a = "Answer" + i;
             animator.SetBool(a, false);
         }
+        GameObject dialoguePanel = GameObject.Find("DialoguePanel");
         DialogueManager dialogueManager = GameObject.Find("DialogueManager").GetComponent<DialogueManager>();
-        dialogueManager.dialoguePanel.GetComponentInChildren<Text>().text = dialogueString;
-        dialogueManager.GenerateAnswers(answerStrings);
+        dialogueManager.RemoveAnswers();
+        dialoguePanel.SetActive(false);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -26,11 +21,10 @@ public class DialogueState : StateMachineBehaviour {
     //
     //}
 
-    //OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        DialogueManager dialogueManager = GameObject.Find("DialogueManager").GetComponent<DialogueManager>();
-        dialogueManager.RemoveAnswers();
-    }
+    // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
+    //override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+    //
+    //}
 
     // OnStateMove is called right after Animator.OnAnimatorMove(). Code that processes and affects root motion should be implemented here
     //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {

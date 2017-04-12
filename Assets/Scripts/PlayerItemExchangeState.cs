@@ -1,21 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CloseConversationState : StateMachineBehaviour {
+public class PlayerItemExchangeState : StateMachineBehaviour {
+    [SerializeField]
+    bool isGiving;
+    [SerializeField]
+    InventoryObject objectToExchange;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        for (int i = 1; i < animator.parameterCount; i++) //0 is conversating, set in dialogue trigger
+        InventoryManager inventoryManager = GameObject.Find("InventoryManager").GetComponent<InventoryManager>();
+        if (isGiving)
+            inventoryManager.inventoryObjects.Add(objectToExchange);
+        else if (inventoryManager.inventoryObjects.Contains(objectToExchange))
         {
-            string a = "Answer" + i;
-            animator.SetBool(a, false);
+            inventoryManager.inventoryObjects.Remove(objectToExchange);
+            animator.SetBool("hasItem", true);
         }
-        GameObject dialoguePanel = GameObject.Find("DialoguePanel");
-        DialogueManager dialogueManager = GameObject.Find("DialogueManager").GetComponent<DialogueManager>();
-        dialogueManager.RemoveAnswers();
-        dialoguePanel.SetActive(false);
+        else
+            animator.SetBool("hasItem", false);
     }
-
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     //override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
     //
