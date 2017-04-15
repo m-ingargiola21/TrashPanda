@@ -13,16 +13,21 @@ public class InventoryManager : MonoBehaviour {
     public List<InventoryObject> inventoryObjects;
 
 
-
+    //Call at the start of the game into the lower screen and when
     public void OpenInventoryManager() {
         InventoryObject[] inventory = inventoryObjects.ToArray();
-        for (int i = 0; i < inventory.Length; i++)
-        {
 
-            buttons[i].text = inventory[i].NameForMenuList;
-        }
+        if (inventory.Length < 1)
+            for (int i = 0; i < buttons.Length; i++)
+                buttons[i].text = "Empty";
 
-        inventoryPanel.SetActive(true);
+        else if(inventory.Length < buttons.Length)
+            for (int i = 0; i < inventory.Length; i++)
+                buttons[i].text = inventory[i].NameForMenuList;
+
+        else if(buttons.Length < inventory.Length)
+            for(int i = 0; i < buttons.Length; i++)
+                inventoryPanel.SetActive(true);
     }
 
 

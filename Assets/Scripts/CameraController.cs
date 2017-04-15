@@ -33,9 +33,9 @@ public class CameraController : MonoBehaviour
     {
         if (hasFinishedWaiting)
         {
-            //MoveCameraToGamePosition();
+            MoveCameraToGamePosition(cameraStartPointOne, cameraEndPointOne);
 
-            //RotateCameraToGamePosition();
+            RotateCameraToGamePosition(cameraStartPointOne, cameraEndPointOne);
         }
     }
 
@@ -56,6 +56,12 @@ public class CameraController : MonoBehaviour
 
     void MoveCameraToGamePosition(Transform startCameraPoint, Transform endCameraPoint)
     {
+        //I'm not sure why this isn't working, probably something with Time.time, it can be pretty wonky. To make it smooth just make an animation curve for the three axis and rotations
+            //For example: AnimationCurve movementCurveX = new AnimationCurve(new Keyframe(startCameraPoint.position.x, 0), new Keyframe(endCameraPoint.position.x, framesToMove));
+                //float framesToMove = 30f; float frameCount = 0;
+        //Then in update if (isMoving) movementCurve.Evaluate(frameCount); frameCount += Time.deltaTime;
+            //Better yet put the movement script in a different component like CinematicCameraMovement and OnEnable() it'll do the Update function so it's not asking if it's Cinematic every frame
+
         float distanceCovered = (Time.time - startTime) * cameraMoveSpeed;
         float fractionOfDistance = distanceCovered / distanceToMoveCamera;
         transform.position = Vector3.Lerp(startCameraPoint.position, endCameraPoint.position, fractionOfDistance);

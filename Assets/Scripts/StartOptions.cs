@@ -7,7 +7,8 @@ using UnityEngine.SceneManagement;
 public class StartOptions : MonoBehaviour {
 
 
-
+    [SerializeField]
+    GameObject mainBackgroundImage;
 	public int sceneToStart = 1;										//Index number in build settings of scene to load if changeScenes is true
 	public bool changeScenes;											//If true, load a new scene when Start is pressed, if false, fade out UI and continue in single scene
 	public bool changeMusicOnStart;										//Choose whether to continue playing menu music or start a new music clip
@@ -62,7 +63,7 @@ public class StartOptions : MonoBehaviour {
 		}
 
 	}
-
+    
 	//Once the level has loaded, check if we want to call PlayLevelMusic
 	void OnLevelWasLoaded()
 	{
@@ -107,6 +108,7 @@ public class StartOptions : MonoBehaviour {
 		//Set trigger for animator to start animation fading out Menu UI
 		animMenuAlpha.SetTrigger ("fade");
 		Invoke("HideDelayed", fadeAlphaAnimationClip.length);
+        mainBackgroundImage.SetActive(false);
 		Debug.Log ("Game started in same scene! Put your game starting stuff here.");
 	}
 

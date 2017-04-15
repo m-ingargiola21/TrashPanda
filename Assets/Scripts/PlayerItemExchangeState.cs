@@ -10,14 +10,21 @@ public class PlayerItemExchangeState : StateMachineBehaviour {
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
         InventoryManager inventoryManager = GameObject.Find("InventoryManager").GetComponent<InventoryManager>();
-        if (isGiving)
-            inventoryManager.inventoryObjects.Add(objectToExchange);
-        else if (inventoryManager.inventoryObjects.Contains(objectToExchange))
+        if (isGiving && !inventoryManager.inventoryObjects.Contains(objectToExchange))
         {
-            inventoryManager.inventoryObjects.Remove(objectToExchange);
+            inventoryManager.inventoryObjects.Add(objectToExchange);
             animator.SetBool("hasItem", true);
         }
-        else
+        else if (isGiving)
+        {
+            animator.SetBool("hasItem", true);
+        }
+        else if (!isGiving && inventoryManager.inventoryObjects.Contains(objectToExchange))
+        {
+            inventoryManager.inventoryObjects.Remove(objectToExchange);
+            animator.SetBool("hasItem", false);
+        }
+        else if (!isGiving)
             animator.SetBool("hasItem", false);
     }
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
