@@ -9,8 +9,8 @@ public class DialogueTrigger : MonoBehaviour {
     //string initialDialogueToDisplay;
     //[SerializeField]
     //string[][] questionDialogueAndAnswerOptions;
-    [SerializeField]
-    GameObject dialoguePanel;
+    //[SerializeField]
+    //GameObject dialoguePanel;
     //[SerializeField]
     //bool[] changesRelationshipStat;
     //[SerializeField]
@@ -43,6 +43,7 @@ public class DialogueTrigger : MonoBehaviour {
             if (!GetComponent<Animator>().isActiveAndEnabled)
                 GetComponent<Animator>().enabled = true;
             GetComponent<Animator>().SetBool("IsConversating", true);
+            GetComponent<Animator>().Play("Hello", 0);
             GameObject.Find("DialogueManager").GetComponent<DialogueManager>().CurrentConversationController = gameObject;
 
         }
@@ -50,8 +51,9 @@ public class DialogueTrigger : MonoBehaviour {
     private void OnTriggerExit(Collider other) {
         if (other.tag == "Player")
         {
-            GetComponent<Animator>().Play("Hello", 0); //Start the state machine from hello, the default state
+            //GetComponent<Animator>().Play("Hello", 0); //Start the state machine from hello, the default state
             GetComponent<Animator>().SetBool("IsConversating", false);
+            GameObject.Find("DialogueManager").GetComponent<DialogueManager>().dialoguePanel.SetActive(false);
         }
     }
     public void Activate() {

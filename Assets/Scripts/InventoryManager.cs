@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class InventoryManager : MonoBehaviour {
     [SerializeField]
-    Text[] buttons;
+    Text[] buttonsTexts;
     [SerializeField]
     GameObject inventoryPanel;
 
@@ -14,19 +14,19 @@ public class InventoryManager : MonoBehaviour {
 
 
     //Call at the start of the game into the lower screen and when
-    public void OpenInventoryManager() {
+    public void UpdateInventoryManager() {
         InventoryObject[] inventory = inventoryObjects.ToArray();
 
         if (inventory.Length < 1)
-            for (int i = 0; i < buttons.Length; i++)
-                buttons[i].text = "Empty";
+            for (int i = 0; i < buttonsTexts.Length; i++)
+                buttonsTexts[i].text = "Empty";
 
-        else if(inventory.Length < buttons.Length)
+        else if(inventory.Length < buttonsTexts.Length)
             for (int i = 0; i < inventory.Length; i++)
-                buttons[i].text = inventory[i].NameForMenuList;
+                buttonsTexts[i].text = inventory[i].NameForMenuList;
 
-        else if(buttons.Length < inventory.Length)
-            for(int i = 0; i < buttons.Length; i++)
+        else if(buttonsTexts.Length < inventory.Length)
+            for(int i = 0; i < buttonsTexts.Length; i++)
                 inventoryPanel.SetActive(true);
     }
 
@@ -34,6 +34,6 @@ public class InventoryManager : MonoBehaviour {
     //DEBUG CODE Input should be on the PlayerController
     private void Update() {
         if (Input.GetButtonDown("Cancel"))
-            OpenInventoryManager();
+            UpdateInventoryManager();
     }
 }

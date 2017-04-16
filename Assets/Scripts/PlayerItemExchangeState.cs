@@ -13,6 +13,7 @@ public class PlayerItemExchangeState : StateMachineBehaviour {
         if (isGiving && !inventoryManager.inventoryObjects.Contains(objectToExchange))
         {
             inventoryManager.inventoryObjects.Add(objectToExchange);
+            inventoryManager.UpdateInventoryManager();
             animator.SetBool("hasItem", true);
         }
         else if (isGiving)
@@ -22,6 +23,7 @@ public class PlayerItemExchangeState : StateMachineBehaviour {
         else if (!isGiving && inventoryManager.inventoryObjects.Contains(objectToExchange))
         {
             inventoryManager.inventoryObjects.Remove(objectToExchange);
+            inventoryManager.UpdateInventoryManager();
             animator.SetBool("hasItem", false);
         }
         else if (!isGiving)

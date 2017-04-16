@@ -13,7 +13,8 @@ public class CloseConversationState : StateMachineBehaviour {
         GameObject dialoguePanel = GameObject.Find("DialoguePanel");
         DialogueManager dialogueManager = GameObject.Find("DialogueManager").GetComponent<DialogueManager>();
         dialogueManager.RemoveAnswers();
-        dialoguePanel.SetActive(false);
+        if (dialoguePanel != null)
+            dialoguePanel.SetActive(false);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

@@ -7,7 +7,7 @@ public class DialogueManager : MonoBehaviour {
     [SerializeField]
     public GameObject answerPanel;
 
-    public GameObject CurrentConversationController;
+    [HideInInspector]public GameObject CurrentConversationController;
 
     public void GenerateAnswers(string [] answers) {
         dialoguePanel.gameObject.SetActive(true);

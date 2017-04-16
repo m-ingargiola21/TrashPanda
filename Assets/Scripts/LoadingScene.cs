@@ -8,7 +8,7 @@ public class LoadingScene : MonoBehaviour {
     [SerializeField]
     Slider progressSlider;
     [SerializeField]
-    private string sceneToOpen;
+    public string sceneToOpen;
 
 
     private const string loadingSceneName = "LoadingScene";
