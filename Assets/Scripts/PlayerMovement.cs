@@ -5,6 +5,25 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     float speed = 6f;
 
+    bool isInRangeOfBox = false;
+    public bool IsInRangeOfBox
+    {
+        get { return isInRangeOfBox; }
+        set { isInRangeOfBox = value; }
+    }
+    bool isPushingBox = false;
+    public bool IsPushingBox
+    {
+        get { return isPushingBox; }
+        set { isPushingBox = value; }
+    }
+    bool isCrouching = false;
+    public bool IsCrouching
+    {
+        get { return isCrouching; }
+        set { isCrouching = value; }
+    }
+    public BoxMovement boxMove;
     Vector3 movement;
     Rigidbody playerRigidbody;
     Animator anim;
@@ -22,25 +41,46 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetButton("rButton"))
+        {
+            isCrouching = true;
+            speed = 3f;
+        }
+        else
+        {
+            isCrouching = false;
+            speed = 6f;
+        }
 
+        if (Input.GetButtonDown("aButton") && isInRangeOfBox)
+        {
+            speed = 2f;
+            if (isCrouching)
+                isCrouching = false;
+            isPushingBox = true;
+            boxMove.ToggleAttachToBox();
+        }
     }
 
     void FixedUpdate()
     {
-        // Store the input axes.
-        float moveHorizontal = Input.GetAxisRaw("mHorizontal");
-        float moveVertical = Input.GetAxisRaw("mVertical");
-        float dirHorizontal = Input.GetAxisRaw("dHorizontal");
-        float dirVertical = Input.GetAxisRaw("dVertical");
+        if(CameraController.HasFinishedWaiting)
+        {
+            // Store the input axes.
+            float moveHorizontal = Input.GetAxisRaw("mHorizontal");
+            float moveVertical = Input.GetAxisRaw("mVertical");
+            float dirHorizontal = Input.GetAxisRaw("dHorizontal");
+            float dirVertical = Input.GetAxisRaw("dVertical");
 
-        // Move the player around the scene.
-        Move(moveHorizontal, moveVertical);
+            // Move the player around the scene.
+            Move(moveHorizontal, moveVertical);
 
-        // Turn the player to face the joystick input.
-        Turning(dirHorizontal, dirVertical);
+            // Turn the player to face the joystick input.
+            Turning(dirHorizontal, dirVertical);
 
-        // Animate the player.
-        //Animating(horizontal, vertical);
+            // Animate the player.
+            //Animating(horizontal, vertical);
+        }
     }
 
     void Move(float horizontal, float vertical)
@@ -57,28 +97,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Turning(float horizontal, float vertical)
     {
-        transform.eulerAngles = new Vector3(transform.eulerAngles.x, Mathf.Atan2(horizontal, vertical) * Mathf.Rad2Deg, transform.eulerAngles.z);
-        // Create a ray from the mouse cursor on screen in the direction of the camera.
-        //Ray camRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        // Create a RaycastHit variable to store information about what was hit by the ray.
-        //RaycastHit floorHit;
-
-        //// Perform the raycast and if it hits something on the floor layer...
-        //if (Physics.Raycast(camRay, out floorHit, camRayLength, floorMask))
-        //{
-        //    // Create a vector from the player to the point on the floor the raycast from the mouse hit.
-        //    Vector3 playerToMouse = floorHit.point - transform.position;
-
-        //    // Ensure the vector is entirely along the floor plane.
-        //    playerToMouse.y = 0f;
-
-        //    // Create a quaternion (rotation) based on looking down the vector from the player to the mouse.
-        //    Quaternion newRotatation = Quaternion.LookRotation(playerToMouse);
-
-        //    // Set the player's rotation to this new rotation.
-        //    playerRigidbody.MoveRotation(newRotatation);
-        //}
+        //transform.eulerAngles = new Vector3(transform.eulerAngles.x, Mathf.Atan2(horizontal, vertical) * Mathf.Rad2Deg, transform.eulerAngles.z);
     }
 
     void Animating(float h, float v)
