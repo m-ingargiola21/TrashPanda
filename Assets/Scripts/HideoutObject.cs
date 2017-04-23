@@ -10,19 +10,41 @@ public class HideoutObject : MonoBehaviour
     [SerializeField] float hideoutObjectMovementX;
     [SerializeField] float hideoutObjectMovementZ;
 
+    [SerializeField] Rigidbody hideoutObjectRigidbody;
+
     // Use this for initialization
     void Start ()
     {
-	
+        hideoutObjectRigidbody = GetComponent<Rigidbody>();
 	}
 	
 	// Update is called once per frame
 	void Update ()
     {
-        HideoutObjectMovementX();
+        HideoutObjectMovement();
 	}
 
-    private void HideoutObjectMovementX()
+    void FixedUpdate()
+    {
+        //HideoutObjectMovementRigidbody();
+    }
+
+    private void HideoutObjectMovementRigidbody()
+    {
+        if (Input.GetButtonDown(movementVerticalAxisName))
+            if (Input.GetAxisRaw(movementVerticalAxisName) > 0) //moves hideout object forward
+                hideoutObjectRigidbody.MovePosition(transform.position - transform.forward);
+            else if (Input.GetAxisRaw(movementVerticalAxisName) < 0) //moves hideout object backward
+                hideoutObjectRigidbody.MovePosition(transform.position + transform.forward);
+
+        if (Input.GetButtonDown(movementHorizontalAxisName))
+            if (Input.GetAxisRaw(movementHorizontalAxisName) > 0) //moves hideout object right
+                hideoutObjectRigidbody.MovePosition(transform.position - transform.right);
+            else if (Input.GetAxisRaw(movementHorizontalAxisName) < 0) //moves hideout object left
+                hideoutObjectRigidbody.MovePosition(transform.position + transform.right);
+    }
+
+    private void HideoutObjectMovement()
     {
         if (Input.GetButtonDown(movementVerticalAxisName))
             if (Input.GetAxisRaw(movementVerticalAxisName) > 0) //moves hideout object forward
@@ -39,7 +61,24 @@ public class HideoutObject : MonoBehaviour
 
         //Current position of hideout object and prints postition to console
         Vector3 hideoutObjectCurrentPosition = transform.position;
-        print(hideoutObjectCurrentPosition);
+        //print(hideoutObjectCurrentPosition);
 
+    }
+
+    private void OnCollisionEnter(Collision col)
+    {
+        if(col.gameObject.tag == "Wall")
+        {
+            print("collision with wall detected");
+        }
+
+        if (col.gameObject.tag == "HideoutObject")//changes box to red if it collides with other object
+        {
+            print("collision with other hideout object detected");
+            col.gameObject.GetComponent<Renderer>().material.color = Color.red;
+            gameObject.GetComponent<Renderer>().material.color = Color.red;
+        }
+
+        //TODO: changes box back to original if it collides with other object
     }
 }
