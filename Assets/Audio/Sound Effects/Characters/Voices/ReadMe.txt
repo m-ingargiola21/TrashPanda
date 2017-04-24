@@ -1,0 +1,1 @@
+Meant to play every string of dialogue that appears on screen. Ideally it would shuffle between the three per character voice type, but one sound works fine.

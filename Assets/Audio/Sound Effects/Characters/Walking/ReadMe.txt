@@ -1,0 +1,1 @@
+These are played randomly in a sequence for as long as the player inputs a movement. For areas with multiple terrain types it may require trigger zones (Ex: Outdoor area with grass patch would have a trigger zone which would switch concretewalk to grasswalk sounds)
