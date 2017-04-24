@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -59,6 +60,11 @@ public class PlayerMovement : MonoBehaviour
                 isCrouching = false;
             isPushingBox = true;
             boxMove.ToggleAttachToBox();
+        }
+
+        if (Input.GetButtonDown("Cancel"))
+        {
+            SceneManager.LoadScene(3);
         }
     }
 
