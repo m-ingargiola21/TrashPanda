@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: e87a590c43be9bb4c87725882faf01c8
 timeCreated: 1493056494
+=======
+guid: ebb069566eaa01c4dafc17a249657f2c
+timeCreated: 1493063657
+>>>>>>> origin/master
 licenseType: Pro
 TextScriptImporter:
   userData: 

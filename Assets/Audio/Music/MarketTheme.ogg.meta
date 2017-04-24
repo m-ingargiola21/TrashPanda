@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: ab80598ffdfb18d43a342032ad9c96ac
 timeCreated: 1493056481
+=======
+guid: 300f3bf4e3b9e5047870691a6edcb227
+timeCreated: 1493063607
+>>>>>>> origin/master
 licenseType: Pro
 AudioImporter:
   serializedVersion: 6

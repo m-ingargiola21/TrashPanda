@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Audio/Music/HideoutTheme.ogg.meta
 guid: 47b95d6e124b5e848bf2b445af2765ba
 timeCreated: 1493056469
+=======
+guid: b58a32874fd35e7478e79c48ba3f3b87
+timeCreated: 1493063638
+>>>>>>> origin/master:Assets/Audio/Music/HideoutTheme.ogg.meta
 licenseType: Pro
 AudioImporter:
   serializedVersion: 6

@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Audio/Sound Effects/Tools/Shovel/ShovelThunk.ogg.meta
 guid: 46ff0452b7089054786e1a260616863e
 timeCreated: 1493056447
+=======
+guid: 9a9c376cebf43ea408615bc133347186
+timeCreated: 1493063609
+>>>>>>> origin/master:Assets/Audio/Sound Effects/Tools/Shovel/ShovelThunk.ogg.meta
 licenseType: Pro
 AudioImporter:
   serializedVersion: 6
