@@ -148,14 +148,14 @@ public class NavMeshPathingAgent : MonoBehaviour
         agent.destination = pathPoints[whichPoint].position;
     }
 
-    void OnCollisionEnter(Collider other)
-    {
-        if (other.tag == "Player")
-        {
-            Debug.Log("Caught The Player");
-            hasCaughtPlayer = true;
-        }
-    }
+    //void OnCollisionEnter(Collision other)
+    //{
+    //    if (other.tag == "Player")
+    //    {
+    //        Debug.Log("Caught The Player");
+    //        hasCaughtPlayer = true;
+    //    }
+    //}
 
     void OnTriggerStay(Collider other)
     {
