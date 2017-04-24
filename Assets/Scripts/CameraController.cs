@@ -23,6 +23,10 @@ public class CameraController : MonoBehaviour
     GameObject playerGameObject;
     [SerializeField]
     float cameraFollowSpeed = 2f;
+    [SerializeField]
+    bool shouldFollowCamera;
+    [SerializeField]
+    bool shouldFollowPlayer;
 
     float playerFollowYOffset = 37.58335f;
     float cameraMoveSpeed = 10.0f;
@@ -41,12 +45,15 @@ public class CameraController : MonoBehaviour
 
 	void Start ()
     {
-        StartCoroutine(WaitForIntroCameraPan());
+        if (shouldFollowCamera)
+            StartCoroutine(WaitForIntroCameraPan());
+        else
+            hasFinishedWaiting = true;
 	}
 	
 	void Update ()
     {
-        if (hasFinishedWaiting)
+        if (hasFinishedWaiting && shouldFollowPlayer)
         {
             float interpolation = cameraFollowSpeed * Time.deltaTime;
 

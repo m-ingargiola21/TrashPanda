@@ -18,10 +18,9 @@ public class StartOptions : MonoBehaviour {
 	[HideInInspector] public Animator animColorFade; 					//Reference to animator which will fade to and from black when starting game.
 	[HideInInspector] public Animator animMenuAlpha;					//Reference to animator that will fade out alpha of MenuPanel canvas group
 	 public AnimationClip fadeColorAnimationClip;		//Animation clip fading to color (black default) when changing scenes
-	[HideInInspector] public AnimationClip fadeAlphaAnimationClip;		//Animation clip fading out UI elements alpha
+	[HideInInspector] public AnimationClip fadeAlphaAnimationClip;      //Animation clip fading out UI elements alpha
 
-
-	private PlayMusic playMusic;										//Reference to PlayMusic script
+    private PlayMusic playMusic;										//Reference to PlayMusic script
 	private float fastFadeIn = .01f;									//Very short fade time (10 milliseconds) to start playing music immediately without a click/glitch
 	private ShowPanels showPanels;										//Reference to ShowPanels script on UI GameObject, to show and hide panels
 
@@ -33,8 +32,8 @@ public class StartOptions : MonoBehaviour {
 
 		//Get a reference to PlayMusic attached to UI object
 		playMusic = GetComponent<PlayMusic> ();
-	}
-
+        
+    }
 
 	public void StartButtonClicked()
 	{

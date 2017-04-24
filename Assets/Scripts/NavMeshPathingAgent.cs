@@ -28,6 +28,7 @@ public class NavMeshPathingAgent : MonoBehaviour
     {
         time = 0;
         agent.destination = pathPoints[whichPoint].position;
+
     }
 
     void Update()
@@ -44,6 +45,11 @@ public class NavMeshPathingAgent : MonoBehaviour
                         StartCoroutine(WaitThenChangeDirections());
                 }
             }
+        }
+
+        if (Input.GetButtonDown("Cancel"))
+        {
+            Application.Quit();
         }
         
     }

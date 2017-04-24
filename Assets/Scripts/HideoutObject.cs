@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using UnityEngine.SceneManagement;
 
 public class HideoutObject : MonoBehaviour
 //M.I. 
@@ -43,6 +44,11 @@ public class HideoutObject : MonoBehaviour
     {
         HideoutObjectMovement();
         PlaceHideoutGameObject();
+
+        if (Input.GetButtonDown("Cancel"))
+        {
+            SceneManager.LoadScene("Level");
+        }
     }
 
     void FixedUpdate()
