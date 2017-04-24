@@ -17,8 +17,12 @@ public class NavMeshPathingAgent : MonoBehaviour
     float time = 0f;
     bool coroutineRunning;
     bool hasReachedDestination;
+    bool hasCaughtPlayer;
     float timeToWaitBeforePathing = 0f;
     int whichPoint = 0;
+
+    Transform detectedPlayer;
+    PlayerMovement playerMovement;
 
     void Start()
     {
@@ -41,9 +45,7 @@ public class NavMeshPathingAgent : MonoBehaviour
                 }
             }
         }
-
-        //if (!coroutineRunning)
-        //    StartCoroutine(SwitchDirections());
+        
     }
 
     IEnumerator WaitThenChangeDirections()
@@ -85,22 +87,89 @@ public class NavMeshPathingAgent : MonoBehaviour
         yield return null;
     }
 
-    //IEnumerator SwitchDirections()
-    //{
-    //    coroutineRunning = true;
-
-    //    if (agent.destination == pathPointOne.position || agent.destination == transform.position)
-    //        agent.destination = pathPointTwo.position;
-    //    else if (agent.destination == pathPointTwo.position || agent.destination == transform.position)
-    //        agent.destination = pathPointOne.position;
-
-    //    yield return new WaitForSeconds(10);
-        
-    //    coroutineRunning = false;
-    //}
-
     public void StopAtDestination()
     {
         agent.autoBraking = true;
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            playerMovement = other.GetComponent<PlayerMovement>();
+            
+            if (!playerMovement.IsCrouching)
+            {
+                agent.autoBraking = true;
+                //Animation
+                detectedPlayer = other.transform;
+
+            }
+        }
+    }
+
+    IEnumerator ReactToLoudPlayerMovement()
+    {
+        coroutineRunning = true;
+
+        agent.SetDestination(detectedPlayer.position);
+
+        bool hasReachedDestination = false;
+
+        while (!hasReachedDestination)
+        {
+            if (!agent.pathPending)
+            {
+                if (agent.remainingDistance <= agent.stoppingDistance)
+                {
+                    if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
+                    {
+                        if (!hasCaughtPlayer)
+                            StartCoroutine(LookForPlayer());
+                        else
+                        {
+                            //Fail Mission...
+                        }
+                    }
+                }
+            }
+        }
+
+        yield return null;
+
+        coroutineRunning = false;
+    }
+
+    IEnumerator LookForPlayer()
+    {
+        //Play searching animation
+        yield return new WaitForSeconds(3f);
+
+        agent.destination = pathPoints[whichPoint].position;
+    }
+
+    void OnCollisionEnter(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            Debug.Log("Caught The Player");
+            hasCaughtPlayer = true;
+        }
+    }
+
+    void OnTriggerStay(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            playerMovement = other.GetComponent<PlayerMovement>();
+
+            if (!playerMovement.IsCrouching)
+            {
+                agent.autoBraking = true;
+
+                detectedPlayer = other.transform;
+
+            }
+        }
     }
 }
