@@ -45,7 +45,7 @@ public class DialogueTrigger : MonoBehaviour {
             GetComponent<Animator>().SetBool("IsConversating", true);
             GetComponent<Animator>().Play("Hello", 0);
             GameObject.Find("DialogueManager").GetComponent<DialogueManager>().CurrentConversationController = gameObject;
-
+            GameObject.Find("DialogueManager").GetComponent<DialogueManager>().dialoguePanel.SetActive(true);
         }
     }
     private void OnTriggerExit(Collider other) {

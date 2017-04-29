@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 public class DialogueManager : MonoBehaviour {
-    [SerializeField]
+    
     public GameObject dialoguePanel;
     [SerializeField]
     public GameObject answerPanel;

@@ -6,11 +6,15 @@ using System.Collections.Generic;
 public class InventoryManager : MonoBehaviour {
     [SerializeField]
     Text[] buttonsTexts;
-    [SerializeField]
+    
     GameObject inventoryPanel;
 
     //[HideInInspector]
     public List<InventoryObject> inventoryObjects;
+
+    private void Awake() {
+        inventoryPanel = GameObject.Find("InventoryPanel").GetComponent<GameObject>();
+    }
 
 
     //Call at the start of the game into the lower screen and when
@@ -32,8 +36,8 @@ public class InventoryManager : MonoBehaviour {
 
 
     //DEBUG CODE Input should be on the PlayerController
-    private void Update() {
-        if (Input.GetButtonDown("Cancel"))
-            UpdateInventoryManager();
-    }
+    //private void Update() {
+    //    if (Input.GetButtonDown("Cancel"))
+    //        UpdateInventoryManager();
+    //}
 }
