@@ -25,7 +25,6 @@ public class LoadingScene : MonoBehaviour {
         LoadingScene.sceneToLoad = sceneToLoad;
         SceneManager.LoadScene(loadingSceneName);
     }
-
     
     private IEnumerator BeginLoading()
     {

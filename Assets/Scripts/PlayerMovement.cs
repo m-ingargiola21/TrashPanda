@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
@@ -24,6 +25,15 @@ public class PlayerMovement : MonoBehaviour
         get { return isCrouching; }
         set { isCrouching = value; }
     }
+    bool openInventory = false;
+    public bool OpenInventory
+    {
+        get { return openInventory; }
+        set { openInventory = value; }
+    }
+    bool isPaused;
+    bool isRunning;
+
     public BoxMovement boxMove;
     Vector3 movement;
     Rigidbody playerRigidbody;
@@ -42,29 +52,117 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetButton("rButton"))
+        if (!openInventory)
         {
-            isCrouching = true;
-            speed = 3f;
+            if (Input.GetButtonDown("xButton"))
+                HandleOpenInventory();
+
+            if (Input.GetButton("rButton"))
+            {
+                if (!isPushingBox)
+                    StartCoroutine(HandleCrouching());
+            }
+            else if (Input.GetButtonUp("rButton"))
+            {
+                if (!isPushingBox)
+                {
+                    StopCoroutine(HandleCrouching());
+                    isCrouching = false;
+                    speed = 6f;
+                }
+            }
+                
+            if (Input.GetButtonDown("aButton") && isInRangeOfBox)
+            {
+                HandleBoxInput();
+            }
+            
+            if (Input.GetButtonDown("startButton"))
+            {
+                HandlePauseInput();
+            }
+
+            if (Input.GetButton("bButton"))
+            {
+                if (!isRunning)
+                    StartCoroutine(HandleRunning());
+            }
+            else if (Input.GetButtonUp("bButton"))
+            {
+                StopCoroutine(HandleRunning());
+                isRunning = false;
+                speed = 6f;
+            }
+        }
+    }
+
+    void HandlePauseInput()
+    {
+        if (!isPaused)
+        {
+            GameObject.Find("PausePanel").SetActive(true);
+            isPaused = true;
+            Time.timeScale = 0;
         }
         else
         {
-            isCrouching = false;
-            speed = 6f;
+            GameObject.Find("PausePanel").SetActive(false);
+            isPaused = false;
+            Time.timeScale = 1;
         }
+    }
 
-        if (Input.GetButtonDown("aButton") && isInRangeOfBox)
+    void HandleBoxInput()
+    {
+        if (!boxMove.hasPlayerAttached)
         {
             speed = 2f;
-            if (isCrouching)
-                isCrouching = false;
+            if (!isCrouching)
+                isCrouching = true;
             isPushingBox = true;
             boxMove.ToggleAttachToBox();
         }
-
-        if (Input.GetButtonDown("Cancel"))
+        else
         {
-            SceneManager.LoadScene(3);
+            speed = 6f;
+            if (isCrouching)
+                isCrouching = false;
+            isPushingBox = false;
+            boxMove.ToggleAttachToBox();
+        }
+    }
+
+    public void QuitToMainMenu()
+    {
+        GameManager.instance.ChangeSceneWithLoad(GameManager.gameState.MainMenuNew);
+    }
+
+    void HandleOpenInventory()
+    {
+        if (!openInventory)
+            openInventory = true;
+        else
+            openInventory = false;
+    }
+    
+    IEnumerator HandleCrouching()
+    {
+        while (Input.GetButton("rButton"))
+        {
+            isCrouching = true;
+            speed = 3f;
+            yield return null;
+        }
+    }
+
+    IEnumerator HandleRunning()
+    {
+        while (Input.GetButton("bButton"))
+        {
+            isCrouching = false;
+            isRunning = true;
+            speed = 12f;
+            yield return null;
         }
     }
 
@@ -75,17 +173,15 @@ public class PlayerMovement : MonoBehaviour
             // Store the input axes.
             float moveHorizontal = Input.GetAxisRaw("mHorizontal");
             float moveVertical = Input.GetAxisRaw("mVertical");
-            float dirHorizontal = Input.GetAxisRaw("dHorizontal");
-            float dirVertical = Input.GetAxisRaw("dVertical");
 
             // Move the player around the scene.
             Move(moveHorizontal, moveVertical);
 
             // Turn the player to face the joystick input.
-            Turning(dirHorizontal, dirVertical);
+            Turning(moveHorizontal, moveVertical);
 
             // Animate the player.
-            //Animating(horizontal, vertical);
+            //Animating(moveHorizontal, moveVertical);
         }
     }
 
@@ -103,7 +199,15 @@ public class PlayerMovement : MonoBehaviour
 
     void Turning(float horizontal, float vertical)
     {
-        //transform.eulerAngles = new Vector3(transform.eulerAngles.x, Mathf.Atan2(horizontal, vertical) * Mathf.Rad2Deg, transform.eulerAngles.z);
+        // Set the movement vector based on the axis input.
+        movement.Set(horizontal, 0f, vertical);
+
+        // Normalise the movement vector and make it proportional to the speed per second.
+        movement = movement.normalized * speed * Time.deltaTime;
+        Quaternion movRotation = Quaternion.Euler(horizontal, 0f, vertical);
+
+        if (movement != Vector3.zero)
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement), speed * Time.deltaTime);
     }
 
     void Animating(float h, float v)

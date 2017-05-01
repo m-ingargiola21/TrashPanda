@@ -97,15 +97,6 @@ public class CameraController : MonoBehaviour
             progress += increment;
             yield return new WaitForSeconds(Time.deltaTime);
         }
-        //yield return new WaitForSeconds(1.5f);
-        //progress = 0f;
-        //while (progress < 1)
-        //{
-        //    increment = Time.deltaTime;
-        //    MoveCameraToGamePosition(cameraStartPointThree, cameraEndPointThree, progress);
-        //    progress += increment;
-        //    yield return new WaitForSeconds(Time.deltaTime);
-        //}
         yield return fadeTime;
         FadeToBlack();
         yield return fadeTime;
@@ -119,7 +110,6 @@ public class CameraController : MonoBehaviour
 
     public void ResetCamera(Transform endCameraPoint)
     {
-        //distanceToMoveCamera = Vector3.Distance(startCameraPoint.position, endCameraPoint.position);
         transform.position = endCameraPoint.position;
         transform.rotation = endCameraPoint.rotation;
     }

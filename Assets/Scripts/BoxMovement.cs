@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class BoxMovement : MonoBehaviour
 {
     Image buttonToPress;
-    bool hasPlayerAttached;
+    public bool hasPlayerAttached;
     PlayerMovement pMovement;
     Transform pTransform;
     Vector3 distanceToPlayerOffet = new Vector3(0f, 0f, 0f);

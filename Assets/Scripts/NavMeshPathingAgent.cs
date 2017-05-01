@@ -110,6 +110,9 @@ public class NavMeshPathingAgent : MonoBehaviour
                 //Animation
                 detectedPlayer = other.transform;
 
+                StopAllCoroutines();
+                coroutineRunning = false;
+                StartCoroutine(ReactToLoudPlayerMovement());
             }
         }
     }
@@ -136,13 +139,13 @@ public class NavMeshPathingAgent : MonoBehaviour
                         {
                             //Fail Mission...
                         }
+                        hasReachedDestination = true;
                     }
                 }
             }
+            yield return null;
         }
-
-        yield return null;
-
+        
         coroutineRunning = false;
     }
 
@@ -154,14 +157,14 @@ public class NavMeshPathingAgent : MonoBehaviour
         agent.destination = pathPoints[whichPoint].position;
     }
 
-    //void OnCollisionEnter(Collision other)
-    //{
-    //    if (other.tag == "Player")
-    //    {
-    //        Debug.Log("Caught The Player");
-    //        hasCaughtPlayer = true;
-    //    }
-    //}
+    void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            Debug.Log("Caught The Player");
+            hasCaughtPlayer = true;
+        }
+    }
 
     void OnTriggerStay(Collider other)
     {
@@ -175,6 +178,9 @@ public class NavMeshPathingAgent : MonoBehaviour
 
                 detectedPlayer = other.transform;
 
+                StopAllCoroutines();
+                coroutineRunning = false;
+                StartCoroutine(ReactToLoudPlayerMovement());
             }
         }
     }
