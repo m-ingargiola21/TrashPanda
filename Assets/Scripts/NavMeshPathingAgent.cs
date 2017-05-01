@@ -16,6 +16,9 @@ public class NavMeshPathingAgent : MonoBehaviour
     
     float time = 0f;
     bool coroutineRunning;
+    bool isReactingSound;
+    bool isReactingSight;
+    bool isLookingForPlayer;
     bool hasReachedDestination;
     bool hasCaughtPlayer;
     float timeToWaitBeforePathing = 0f;
@@ -41,7 +44,7 @@ public class NavMeshPathingAgent : MonoBehaviour
             {
                 if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
                 {
-                    if (!coroutineRunning)
+                    if (!coroutineRunning && !isLookingForPlayer && !isReactingSight && !isReactingSound)
                         StartCoroutine(WaitThenChangeDirections());
                 }
             }
@@ -104,22 +107,44 @@ public class NavMeshPathingAgent : MonoBehaviour
         {
             playerMovement = other.GetComponent<PlayerMovement>();
             
-            if (!playerMovement.IsCrouching)
+            if (!playerMovement.IsCrouching && playerMovement.isMoving)
             {
                 agent.autoBraking = true;
                 //Animation
                 detectedPlayer = other.transform;
 
-                StopAllCoroutines();
-                coroutineRunning = false;
+                StopCoroutines();
                 StartCoroutine(ReactToLoudPlayerMovement());
             }
         }
     }
 
-    IEnumerator ReactToLoudPlayerMovement()
+    public void StartSightReaction(Transform PlayerTransform)
     {
-        coroutineRunning = true;
+        RaycastHit hit = new RaycastHit();
+        Ray ray = new Ray(transform.position, PlayerTransform.position - transform.position);
+        
+        detectedPlayer = PlayerTransform;
+
+        LayerMask layers = ((1 << LayerMask.NameToLayer("Default")) | ((1 << LayerMask.NameToLayer("TransparentFX")))
+            | ((1 << LayerMask.NameToLayer("Ignore Raycast"))) | ((1 << LayerMask.NameToLayer("UI"))) | ((1 << LayerMask.NameToLayer("Floor"))));
+
+        if (Physics.Raycast(ray, out hit, 22f, layers, QueryTriggerInteraction.Ignore))
+        {
+            if (hit.transform.tag == "Player")
+            {
+                if (!isReactingSight && !isLookingForPlayer)
+                    StartCoroutine(ReactToSeeingPlayer());
+            }
+        }
+        
+    }
+
+    IEnumerator ReactToSeeingPlayer()
+    {
+        isReactingSight = true;
+
+        agent.speed = 10f;
 
         agent.SetDestination(detectedPlayer.position);
 
@@ -134,27 +159,71 @@ public class NavMeshPathingAgent : MonoBehaviour
                     if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
                     {
                         if (!hasCaughtPlayer)
+                        {
                             StartCoroutine(LookForPlayer());
+                            hasReachedDestination = true;
+                        }
                         else
                         {
                             //Fail Mission...
                         }
-                        hasReachedDestination = true;
+
+                    }
+                }
+            }
+            yield return null;
+        }
+
+        agent.speed = 5f;
+
+        isReactingSight = false;
+    }
+
+    IEnumerator ReactToLoudPlayerMovement()
+    {
+        isReactingSound = true;
+
+        agent.SetDestination(detectedPlayer.position);
+
+        bool hasReachedDestination = false;
+
+        while (!hasReachedDestination)
+        {
+            if (!agent.pathPending)
+            {
+                if (agent.remainingDistance <= agent.stoppingDistance)
+                {
+                    if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
+                    {
+                        if (!hasCaughtPlayer)
+                        {
+                            StartCoroutine(LookForPlayer());
+                            hasReachedDestination = true;
+                        }
+                        else
+                        {
+                            //Fail Mission...
+                        }
+                        
                     }
                 }
             }
             yield return null;
         }
         
-        coroutineRunning = false;
+        isReactingSound = false;
     }
 
     IEnumerator LookForPlayer()
     {
+        isLookingForPlayer = true;
+
         //Play searching animation
         yield return new WaitForSeconds(3f);
 
         agent.destination = pathPoints[whichPoint].position;
+
+        isLookingForPlayer = false;
     }
 
     void OnCollisionEnter(Collision other)
@@ -162,26 +231,37 @@ public class NavMeshPathingAgent : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             Debug.Log("Caught The Player");
-            hasCaughtPlayer = true;
+            //hasCaughtPlayer = true;
         }
     }
 
     void OnTriggerStay(Collider other)
     {
-        if (other.tag == "Player")
+        if (other.tag == "Player" && !isLookingForPlayer && !isReactingSight && !isReactingSound)
         {
             playerMovement = other.GetComponent<PlayerMovement>();
 
-            if (!playerMovement.IsCrouching)
+            if (!playerMovement.IsCrouching && playerMovement.isMoving)
             {
                 agent.autoBraking = true;
 
                 detectedPlayer = other.transform;
 
-                StopAllCoroutines();
-                coroutineRunning = false;
+
+                StopCoroutines();
                 StartCoroutine(ReactToLoudPlayerMovement());
             }
         }
+    }
+
+    void StopCoroutines()
+    {
+        StopAllCoroutines();
+        coroutineRunning = false;
+        isLookingForPlayer = false;
+        isReactingSound = false;
+        isReactingSight = false;
+
+        agent.speed = 5f;
     }
 }

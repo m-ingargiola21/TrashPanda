@@ -34,6 +34,7 @@ public class PlayerMovement : MonoBehaviour
     bool isPaused;
     bool isRunning;
 
+    public bool isMoving;
     public BoxMovement boxMove;
     Vector3 movement;
     Rigidbody playerRigidbody;
@@ -125,7 +126,7 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             speed = 6f;
-            if (isCrouching)
+            if (isCrouching && !Input.GetButton("rButton"))
                 isCrouching = false;
             isPushingBox = false;
             boxMove.ToggleAttachToBox();
@@ -175,7 +176,10 @@ public class PlayerMovement : MonoBehaviour
             float moveVertical = Input.GetAxisRaw("mVertical");
 
             // Move the player around the scene.
-            Move(moveHorizontal, moveVertical);
+            if (!isPushingBox)
+                Move(moveHorizontal, moveVertical);
+            else
+                Move(0, moveVertical);
 
             // Turn the player to face the joystick input.
             Turning(moveHorizontal, moveVertical);
@@ -192,6 +196,11 @@ public class PlayerMovement : MonoBehaviour
 
         // Normalise the movement vector and make it proportional to the speed per second.
         movement = movement.normalized * speed * Time.deltaTime;
+
+        if (movement != Vector3.zero)
+            isMoving = true;
+        else
+            isMoving = false;
 
         // Move the player to it's current position plus the movement.
         playerRigidbody.MovePosition(transform.position + movement);

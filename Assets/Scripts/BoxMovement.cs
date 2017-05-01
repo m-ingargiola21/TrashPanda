@@ -26,8 +26,9 @@ public class BoxMovement : MonoBehaviour
         if (hasPlayerAttached)
         {
             buttonToPress.enabled = false;
-            distanceToPlayerOffet.Set(pTransform.position.x - transform.position.x, 
-                transform.position.y, pTransform.position.z - transform.position.z);
+            StartCoroutine(MatchPlayerMovement());
+            //distanceToPlayerOffet.Set(pTransform.position.x - transform.position.x, 
+            //    transform.position.y, pTransform.position.z - transform.position.z);
             transform.Translate(distanceToPlayerOffet);
         }
     }
@@ -44,11 +45,20 @@ public class BoxMovement : MonoBehaviour
         }
     }
 
+    void OnTriggerStay(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            pTransform = other.transform;
+            pMovement.IsInRangeOfBox = true;
+        }   
+    }
+
     void OnTriggerExit(Collider other)
     {
         if (other.tag == "Player")
         {
-            other.GetComponent<PlayerMovement>().IsInRangeOfBox = false;
+            pMovement.IsInRangeOfBox = false;
             buttonToPress.enabled = false;
         }
     }
@@ -57,7 +67,7 @@ public class BoxMovement : MonoBehaviour
     {
         while(hasPlayerAttached)
         {
-            distanceToPlayerOffet.Set(pTransform.position.x - transform.position.x, transform.position.y, pTransform.position.z - transform.position.z);
+            distanceToPlayerOffet.Set(0f, 0f, pTransform.position.z - transform.position.z);
             yield return null;
         }
     }
