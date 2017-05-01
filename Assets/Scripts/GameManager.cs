@@ -40,11 +40,13 @@ public class GameManager : MonoBehaviour
 	    if (isInvetoryAccessible)
         {
             if (playerMovement.OpenInventory)
+            {
                 if (!isInventoryOpen)
                     HandleInventoryInput();
 
                 if (Input.GetButtonDown("xButton"))
                     HandleNoInventoryInput();
+            }
         }
 	}
 
