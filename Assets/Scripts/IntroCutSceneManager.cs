@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
+//TLM
 public class IntroCutSceneManager : MonoBehaviour {
     [SerializeField]
     string sceneToLoad;

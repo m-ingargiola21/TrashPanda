@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
-
+//TLM
 public class SceneLoadOnClick : MonoBehaviour {
 
     [SerializeField]

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+//TLM
 public class DialogueManager : MonoBehaviour {
     
     public GameObject dialoguePanel;

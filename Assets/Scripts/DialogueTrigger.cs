@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System;
-
+//TLM
 [RequireComponent(typeof(Animator))]
 public class DialogueTrigger : MonoBehaviour {
     //[SerializeField]

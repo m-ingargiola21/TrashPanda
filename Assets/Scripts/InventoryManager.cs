@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
-
+//TLM
 public class InventoryManager : MonoBehaviour {
     [SerializeField]
     Text[] buttonsTexts;

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+//TLM
 public class PlayerItemExchangeState : StateMachineBehaviour {
     [SerializeField]
     bool isGiving;
