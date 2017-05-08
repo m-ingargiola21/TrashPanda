@@ -12,7 +12,7 @@ public class LoadingScene : MonoBehaviour {
 
 
     private const string loadingSceneName = "LoadingScene";
-    private static string sceneToLoad = "demo scene";
+    private static string sceneToLoad = "MainMenuNew";
 
 	// Use this for initialization
 	void Start () {
@@ -31,7 +31,7 @@ public class LoadingScene : MonoBehaviour {
 
         yield return new WaitForSeconds(0.5f);
 
-        AsyncOperation async = SceneManager.LoadSceneAsync(sceneToOpen, LoadSceneMode.Additive);
+        AsyncOperation async = SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
 
         while (!async.isDone)
         {

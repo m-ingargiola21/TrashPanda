@@ -11,9 +11,11 @@ public class NavMeshPathingAgent : MonoBehaviour
     NavMeshAgent agent;
     [SerializeField]
     bool isRotationOnly;
+    [SerializeField]
+    LossInfo lose;
 
     //float distance = 0f;
-    
+
     float time = 0f;
     bool coroutineRunning;
     bool isReactingSound;
@@ -50,10 +52,10 @@ public class NavMeshPathingAgent : MonoBehaviour
             }
         }
 
-        if (Input.GetButtonDown("Cancel"))
-        {
-            Application.Quit();
-        }
+        //if (Input.GetButtonDown("Cancel"))
+        //{
+        //    Application.Quit();
+        //}
         
     }
 
@@ -86,7 +88,7 @@ public class NavMeshPathingAgent : MonoBehaviour
         }
         else
         {
-
+            
         }
     }
 
@@ -165,7 +167,7 @@ public class NavMeshPathingAgent : MonoBehaviour
                         }
                         else
                         {
-                            //Fail Mission...
+                            lose.Loss();
                         }
 
                     }
@@ -202,7 +204,7 @@ public class NavMeshPathingAgent : MonoBehaviour
                         }
                         else
                         {
-                            //Fail Mission...
+                            lose.Loss();
                         }
                         
                     }
@@ -231,7 +233,8 @@ public class NavMeshPathingAgent : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             Debug.Log("Caught The Player");
-            //hasCaughtPlayer = true;
+            hasCaughtPlayer = true;
+            lose.Loss();
         }
     }
 
